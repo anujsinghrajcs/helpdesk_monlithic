@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Apointments</title>
+        <link href="media/dataTables/demo_page.css" rel="stylesheet" type="text/css" />
+        <link href="media/dataTables/demo_table.css" rel="stylesheet" type="text/css" />
+        <link href="media/dataTables/demo_table_jui.css" rel="stylesheet" type="text/css" />
+        <link href="media/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+      
+	
+        <link href="media/themes/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" media="all" />
+		<link rel="styleshee" type="text/css" href="media/dataTables/jquery.timepicker.css" />
+  <link rel="stylesheet" type="text/css" href="media/dataTables/bootstrap-datepicker.css" />
+  <link rel="stylesheet" type="text/css" href="media/dataTables/jquery.autocomplete.css" />
+
+  <script type="text/javascript" src="scripts/jquery.min.js"></script>
+   <script type="text/javascript" src="scripts/jquery-ui.js"></script>
+
+     <script src="scripts/jquery.dataTables.1.8.2.js" type="text/javascript"></script>
+        <script src="scripts/jquery.dataTables.editable.js" type="text/javascript"></script>
+        <script src="scripts/jquery.jeditable.js" type="text/javascript"></script>
+        <script src="scripts/jquery.validate.js" type="text/javascript"></script>
+        <script type="text/javascript">
+
+		jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+	"num-html-pre": function ( a ) {
+		var x = String(a).replace( /<[\s\S]*?>/g, "" );
+		return parseFloat( x );
+	},
+
+	"num-html-asc": function ( a, b ) {
+		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	},
+
+	"num-html-desc": function ( a, b ) {
+		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	}
+} );
+</script>
+		   <script type="text/javascript" src="scripts/jquery-ui.js"></script>
+		   <script type="text/javascript" src="scripts/jquery.autocomplete.js"></script>
+
+        <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $("#companies").dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/EditableTable/CompanyAjaxDataSource",
+                "bProcessing": true,
+                "sPaginationType": "full_numbers",
+                "bJQueryUI": true,
+                "aoColumnDefs": [
+                              { "sType": "html", "aTargets": [ 0 ] },
+                      { "sType": "html", "aTargets": [ 0 ] },
+                       { "sType": "date", "aTargets": [ 0 ] },
+				{ "sType": "numeric", "aTargets":0 },
+				{ "sType": "numeric", "aTargets":3 },
+					  { type: 'num-html', aTargets: 0 }
+                     ],
+					  "aoColumns": [
+                              {  "sName": "ID",
+                                 "bSearchable": false,
+                                 "bSortable": false,
+                                 "bVisible": false
+                                     },
+                      { "sName": "product_name" },
+                      { "sName": "date" },
+					  {  "sName": "time_slots",
+                                 "bSortable": false,
+                     }
+                   ,
+                      { "sName": "TotalCount", "sType": "num-html", "aTargets": [5]},
+					  { "sName": "available_count",type: 'num-html'}
+                     ]
+         }).makeEditable({
+        	    "aoColumns": [
+				               null,
+        	                  null,
+        	                  null,//null for read-only columns
+        	                  null,
+        	                  null,
+        	                  null//null for read-only columns
+        	                     ]
+        	              });
+
+
+				 $("#companies_filter input").autocompleteArray(
+					[
+					 "ACI Solution",
+					"ASR 1000 Series",
+					"ASR 5000/5500 Series - LESS, GSS (GTPP Storage Server)",
+					"ASR 5000/5500 Series - MME, PGW, SGW, xGW, PDNGW",
+					"ASR 5000/5500 Series - PDSN, HA, EHA, NEMO, HSGW",
+					"ASR 5000/5500 Series - TTG, PDG, ePDG, PDIF, IPMS, IPSG",
+					"ASR 5000/5500 Series - WEM, MUR (Mobility Unified Reporting), InTracer",
+					"ASR 9000 Series",
+					"Catalyst 3750 Series",
+					"Catalyst 4500 Series",
+					"Catalyst 6500 Series",
+					"Catalyst 6800 Series",
+					"CRS Series",
+					"CUBE (Unified Border Element)",
+					"CUCM (Unified Communications Manager)",
+					"CUPS (Unified Presence Server)",
+					"Jabber for Android",
+					"Jabber for iPhone",
+					"Jabber for Mac",
+					"Jabber for Tablets (iPad)",
+					"Jabber for Windows",
+					"MDS 9000 Series",
+					"Nexus 1000V Series",
+					"Nexus 2000 Series",
+					"Nexus 3000 Series",
+					"Nexus 4000 Series",
+					"Nexus 5000 Series",
+					"Nexus 6000 Series",
+					"Nexus 7000 Series",
+					"Nexus 9000 Series",
+					"UCS B-Series",
+					"UCS C-Series",
+					"UCS Central",
+					"UCS E-Series",
+					"UCS MS Hyper-V",
+					"UCS OS",
+					"UCS VMware",
+					"Unity Connection",
+					"Voice Gateways"
+					],
+					{
+					delay:10,
+					minChars:1,
+					matchSubset:1,
+					onItemSelect:selectItem,
+                    onFindValue:findValue,
+					autoFill:true,
+					maxItemsToShow:10
+					}
+					);
+                   function selectItem(li) {
+					$('#companies_filter input').trigger("blur");
+					$('#companies_filter input').trigger("keydown");
+					$('#companies_filter input').trigger("keyup");
+					$('#companies_filter input').trigger("keypress");
+				
+					
+						if( li == null ) return alert("No match!");
+						
+                     };
+				   function findValue(li) {
+						if( li == null ) return alert("No match!");
+					
+                   };
+
+
+				   function isDST(t) { //t is the date object to check, returns true if daylight saving time is in effect.
+						var jan = new Date(t.getFullYear(),0,1);
+						var jul = new Date(t.getFullYear(),6,1);
+						return Math.min(jan.getTimezoneOffset(),jul.getTimezoneOffset()) == t.getTimezoneOffset();  
+					}
+					if(isDST(new Date()))
+			     {
+				    $("select[name='timeZone']").append('<option value="AST">Atlantic Time </option>');
+					$("select[name='timeZone']").append('<option value="America/New_York">Eastern Time </option>');
+					$("select[name='timeZone']").append('<option value="America/Chicago">Central Time </option>');
+					$("select[name='timeZone']").append('<option value="America/Denver">Mountain Time </option>');
+					$("select[name='timeZone']").append('<option value="America/Los_Angeles">Pacific Time </option>');
+
+				 }
+				 else
+			     {
+				        $("select[name='timeZone']").append('<option value="AST">Atlantic Time </option>');
+						$("select[name='timeZone']").append('<option value="America/New_York">Eastern Time </option>');
+						$("select[name='timeZone']").append('<option value="America/Chicago">Central Time </option>');
+						$("select[name='timeZone']").append('<option value="America/Denver">Mountain Time </option>');
+						$("select[name='timeZone']").append('<option value="America/Los_Angeles">Pacific Time </option>');
+
+
+				 }
+
+
+                 });
+
+
+				  
+
+        </script>
+    </head>
+    <body id="dt_example">
+        <div id="container">
+            <div id="demo_jui">
+            
+    		
+		        <table id="companies" class="display">
+		            <thead>
+		                <tr>
+		                	<th>ID</th>
+		                    <th>Product Name</th>
+		                    <th>Date</th>
+		                    <th>Time Slots</th>
+		                    <th>Total Slots</th>
+							<th>Free Slots</th>
+		                </tr>
+		                
+		            </thead>
+		            <tbody>
+		          
+		            </tbody>
+		            <tfoot>
+		            
+		            <tr>
+		                	<th colspan="3">&nbsp;</th>
+		                    <th colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<button id="btnAddNewRow" value="Ok" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button">Add Appointment</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; <button id="btnDeleteRow" value="cancel" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button">Delete Appointment</button> </th>
+		                </tr>
+		                <tfood>
+		        </table>
+		    </div>
+            
+            
+            <form id="formAddNewRow" action="#" title="Add new Appointment">
+			    <input type="hidden" id="id" name="id" value="-1" rel="0" />
+			    <table ><tr><td>
+			    Product Name</td><td>
+				<select name="name"  id="name" class="required" rel="1">
+				<option value="ACI Solution">	ACI Solution   </option>                        
+				<option value="ASR 1000 Series">	ASR 1000 Series      </option>                  
+				<option value="ASR 1000 Series">	ASR 5000/5500 Series - LESS, GSS (GTPP </option>
+				<option value="ASR 5000/5500 Series - MME, PGW, SGW, xGW, PDNGW">	ASR 5000/5500 Series - MME, PGW, SGW, xGW, PDNGW</option>
+				<option value="ASR 5000/5500 Series - PDSN, HA, EHA, NEMO, HSGW">	ASR 5000/5500 Series - PDSN, HA, EHA, NEMO, HSGW</option>
+				<option value="ASR 5000/5500 Series - TTG, PDG, ePDG, PDIF, IPMS, IPSG">	ASR 5000/5500 Series - TTG, PDG, ePDG, PDIF, IPMS, IPSG</option>
+				<option value="ASR 5000/5500 Series - TTG, PDG, ePDG, PDIF, IPMS, IPSG">	ASR 5000/5500 Series - WWEM, MUR (Mobility Unified Reporting), InTracer</option>
+				<option value="ASR 9000 Series">	ASR 9000 Series  </option>                      
+				<option value="Catalyst 3750 Series">	Catalyst 3750 Series </option>                  
+				<option value="Catalyst 4500 Series">	Catalyst 4500 Series </option>                  
+				<option value="Catalyst 6500 Series">	Catalyst 6500 Series </option>                  
+				<option value="Catalyst 6800 Series">	Catalyst 6800 Series </option>                  
+				<option value="CRS Series">	CRS Series      </option>                       
+				<option value="CUBE (Unified Border Element)">	CUBE (Unified Border Element)  </option>        
+				<option value="CUCM (Unified Communications Manager)">	CUCM (Unified Communications Manager)  </option>
+				<option value="Catalyst 3750 Series">	CUPS (Unified Presence Server)  </option>       
+				<option value="Jabber for Windows">Jabber for Windows</option>
+				<option value="Jabber for Mac">Jabber for Mac</option>
+				<option value="Jabber for Android">Jabber for Android</option>
+				<option value="Jabber for iPhone">Jabber for iPhone</option>
+				<option value="Jabber for Tablets (iPad)">Jabber for Tablets (iPad)</option>
+				<option value="MDS 9000 Series">	MDS 9000 Series    </option>                    
+				<option value="Nexus 1000V Series">	Nexus 1000V Series   </option>                  
+				<option value="Nexus 2000 Series">Nexus 2000 Series</option>
+				<option value="Nexus 3000 Series">Nexus 3000 Series</option>
+				<option value="Nexus 4000 Series">Nexus 4000 Series</option>
+				<option value="Nexus 5000 Series">Nexus 5000 Series</option>
+				<option value="Nexus 6000 Series">Nexus 6000 Series</option>
+				<option value="Nexus 7000 Series">Nexus 7000 Series</option>
+				<option value="Nexus 9000 Series">Nexus 9000 Series</option>
+				<option value="UCS B-Series">	UCS B-Series    </option>                       
+				<option value="UCS C-Series">	UCS C-Series    </option>                       
+				<option value="UCS Central">	UCS Central</option>
+				<option value="UCS E-Series">	UCS E-Series</option>
+				<option value="UCS MS Hyper-V">	UCS MS Hyper-V</option>
+				<option value="UCS OS">	UCS OS</option>
+				<option value="UCS VMware">	UCS VMware</option>
+				<option value="Unity Connection ">	Unity Connection</option>
+				<option value="Voice Gateways">	Voice Gateways</option>
+				</select>
+				</td></tr>
+			   
+	    <tr><td colspan=2>
+			  
+		<div id="alternateUiWidgetsExample">
+		 <table>
+			   <tr><td>
+     Apointment Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</td><td> <input type="text" class="date start required " rel="2" name="date" id="datepicker"  /> 
+  </td></tr>
+	
+  <tr><td>
+    From Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</td><td> <input type="text" class="time start required" rel="3" name="toTime"  />   </td></tr>
+  <tr><td>  To Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp </td><td> <input type="text" class="time end required" rel="4" name="fromTime"/>
+	 </td></tr></table>
+</div>
+
+
+  </td></tr>
+  <tr><td>
+	Time Zone &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</td><td><select name="timeZone1" id='timeZone1' hidden="true" class="required"><option></option></select>
+	 <select name="timeZone" id='timeZone' class="required">
+	 <option></option>
+
+
+	 </select>
+  </td></tr>
+  <tr><td>
+	 No of Slots &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</td><td><input type="text" name="count"  class="required" id="count" rel="5"/>
+  </td></tr>
+</table>
+ 
+<!-- include input widgets; this is independent of Datepair.js -->
+<link href="media/dataTables/pikaday.css" rel="stylesheet" type="text/css" />
+<link href="media/dataTables/jquery.ptTimeSelect.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="scripts/bootstrap-datepicker.js"></script>
+<script src="https://jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+<script type="text/javascript" src="scripts/moments.js"></script>
+<script type="text/javascript" src="scripts/pikaday.js"></script>
+<script type="text/javascript" src="scripts/jquery.ptTimeSelect.js"></script>
+ <script type="text/javascript" src="scripts/timezones.full.js"></script>
+
+
+
+<script type="text/javascript" src="scripts/jquery.datepair.js"></script>
+<script type="text/javascript" src="scripts/datepair.js"></script>
+
+
+<script>
+  $('#timeZone1').timezones();
+    // initialize input widgets
+    // ptTimeSelect doesn't trigger change event by default
+    $('#alternateUiWidgetsExample .time').ptTimeSelect({
+        'onClose': function($self) {
+            $self.trigger('change');
+        }
+    });
+
+    $('#alternateUiWidgetsExample .date').pikaday({
+        field: document.getElementById('datepicker'),
+        trigger: document.getElementById('datepicker-button'),
+        minDate: new Date(),
+        maxDate: new Date(new Date().getTime()+(56*24*60*60*1000)),
+        yearRange: [2010,2020],
+		format:'MM/DD/YYYY'
+    });
+
+    var TIMEFORMAT = 'hh:mm A';
+    var alternateUiWidgetsExampleEl = document.getElementById('alternateUiWidgetsExample');
+    var alternateWidgetsDatepair = new Datepair(alternateUiWidgetsExampleEl, {
+        parseTime: function(input){
+            // use moment.js to parse time
+            var m = moment(input.value, TIMEFORMAT);
+            return m.toDate();
+        },
+        updateTime: function(input, dateObj){
+            var m = moment(dateObj);
+            input.value = m.format(TIMEFORMAT);
+        },
+        parseDate: function(input){
+          var picker = $(input).data('pikaday');
+            return picker.getDate();
+        },
+        updateDate: function(input, dateObj){
+            var picker = $(input).data('pikaday');
+		     return picker.setDate(dateObj,true);
+        }
+    });
+</script> 
+            
+			</form>
+
+        </div>
+    </body>
+</html>
+
+
