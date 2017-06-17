@@ -1,5 +1,7 @@
 
 <%@ page import="java.util.Map" %>  
+<%@ page import="org.spring.controller.*" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %> 
 <html>
 <head>
@@ -86,7 +88,7 @@ input[type="submit"] {cursor:pointer;}
     <script>
 	$(document).ready(function() {
 		$.ajax({
-			url: "http://localhost:8080/helpdesk/rest/CatalogueService/getCatalogue/bhima"
+			url: "http://localhost:9080/helpdesk/rest/CatalogueService/getCatalogue/pkocher"
 		}).then(function(data) {
 			var response=data.ProductFamilyList;
 		 
@@ -110,7 +112,7 @@ input[type="submit"] {cursor:pointer;}
 	function loadIssueType(dataItem)
 	{
 	  $.ajax({
-			url: "http://localhost:8080/helpdesk/rest/service/rest/caseCreateInputsService/getIssueTypesAndScopes/"+dataItem
+			url: "http://localhost:9080/helpdesk/rest/service/rest/caseCreateInputsService/getIssueTypesAndScopes/"+dataItem
 		}).then(function(data) {
 			var response=data.IssueTypeDetails;
 		 
@@ -156,7 +158,7 @@ input[type="submit"] {cursor:pointer;}
 		$( "#error" ).append("Please fill all fields");
 		return;
 		}
-	var userId ="anujsin"
+	var userId =""+user
 	var summary=title;
 	var statusName="open";
 	var typeName="Issue";
@@ -175,11 +177,11 @@ input[type="submit"] {cursor:pointer;}
 	var access_level="3";
 	var descriptiveSummary="";
 	var accesslevel="3";
-	
+	var user=document.getElementById("user").value;
 	var emailAddress="";
 	  
 	        var dataToSend= { "Contact": {
-            "ccoid": "billa",
+            "ccoid": ""+user,
             "contactPointType": "This is test ticket",
             "contactPointValue": "This is test ticket"
         },
@@ -207,7 +209,7 @@ input[type="submit"] {cursor:pointer;}
         'Accept': 'application/json',
         'Content-Type': 'application/json' 
     },
-            url: 'http://localhost:8080/helpdesk/rest/TicketService/createTicket',
+            url: 'http://localhost:9080/helpdesk/rest/TicketService/createTicket',
             type: 'POST',
 			dataType: 'json',
             data: JSON.stringify(dataToSend)    ,
@@ -246,13 +248,13 @@ input[type="submit"] {cursor:pointer;}
                 <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                 <ul class="nav" id="nav">
 				                   <%
-								       String user = (String)request.getAttribute("user"); 
-										if(user.equals("arsinghcs@gmail.com"))
-										{
+				                   LoginForm loginform=(LoginForm)session.getAttribute("LOGGEDIN_USER") ;
+				                   String user=loginform.getUsername();
+				                   if(session.getAttribute("ACCESS_LEVEL").equals("4"))										{
                                 
 									%>
 								
-                              <li class="active"><a href="productcatalogueAdmin">Product Catalogue Admin</a></li>
+                                  <li class="active"><a href="productcatalogueAdmin">Product Catalogue Admin</a></li>
 							  <%
 								}
 							  %>
@@ -261,7 +263,7 @@ input[type="submit"] {cursor:pointer;}
                                 <li><a href="notesAll">Message Board</a></li>
                                 <li><a href="viewAllCase">View Incident</a></li>
 								 <%
-									if(user.equals("arsinghcs@gmail.com"))
+				                   if(session.getAttribute("ACCESS_LEVEL").equals("4"))									
 									{
                                 
 									%>
@@ -270,7 +272,8 @@ input[type="submit"] {cursor:pointer;}
 								}
 							  %>
 								<li><a href="takeAppointment">Take Appointment</a></li>
-
+								<li><a href="search">Search</a></li>
+                                   <input type=hidden value=<%=user%> id="user">
 								<div class="clearfix"></div>
 							</ul>
                 <script type="text/javascript" src="js/responsive-nav.js"></script>
@@ -307,7 +310,7 @@ input[type="submit"] {cursor:pointer;}
 				<div id="error" style="color: #FD0C0C; width:100%"></div>
                     <div class="living_box">
 									
-									Caser Title
+									Case Title
 									<input type="text" id="caseTitle" class="form-control check_input" placeholder="Caser Title" style="color: #FD0C0C; width:100%"/>
 									<div class="name_val">&nbsp;</div>
 									<fieldset>

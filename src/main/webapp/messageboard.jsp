@@ -1,3 +1,4 @@
+<%@ page import="org.spring.controller.*" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -22,7 +23,7 @@
 <script>
 	function createMessage()
 		 {
-
+		var user=document.getElementById("user").value;
 		    var comment=document.getElementById("comment").value;
 		    var title = getParameterByName('title');
 			if(title=='')
@@ -40,12 +41,12 @@
 			var year = currentDate.getFullYear()
             var tdate= day + "/" + month + "/" + year 
   
-		    var dataToSend= {"title":title,"message":comment,"userId":"anuj","date":currentDate};
+		    var dataToSend= {"title":title,"message":comment,"userId":user,"date":currentDate};
 		   	$.ajax({headers: { 
         'Accept': 'application/json',
         'Content-Type': 'application/json' 
     },
-            url: 'http://localhost:8080/helpdesk/rest/MessageService/createMessage',
+            url: 'http://localhost:9080/helpdesk/rest/MessageService/createMessage',
             type: 'POST',
 			dataType: 'json',
             data: JSON.stringify(dataToSend),
@@ -70,7 +71,7 @@
 	 if(title!='')
 	  {
 		$.ajax({
-			url: "http://localhost:8080/helpdesk/rest/MessageService/getMessage/"+title
+			url: "http://localhost:9080/helpdesk/rest/MessageService/getMessage/"+title
 		}).then(function(data) {
 		 var conunt=1; 
 		$("#title").append(title);
@@ -121,12 +122,14 @@
             <div class="menu">
                 <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                <ul class="nav" id="nav">
-				                   <%
-								       String user = (String)request.getAttribute("user"); 
-										if(user.equals("arsinghcs@gmail.com"))
-										{
-                                
-									%>
+				                    
+						     <%
+						     LoginForm loginform=(LoginForm)session.getAttribute("LOGGEDIN_USER") ;
+			                   String user=loginform.getUsername();
+			                   if(session.getAttribute("ACCESS_LEVEL").equals("4"))
+                                                                                {
+
+                                                                        %>
 								
                               <li class="active"><a href="productcatalogueAdmin">Product Catalogue Admin</a></li>
 							  <%
@@ -137,7 +140,7 @@
                                 <li><a href="notesAll">Message Board</a></li>
                                 <li><a href="viewAllCase">View Incident</a></li>
 								 <%
-									if(user.equals("arsinghcs@gmail.com"))
+				                   if(session.getAttribute("ACCESS_LEVEL").equals("4"))
 									{
                                 
 									%>
@@ -146,6 +149,8 @@
 								}
 							  %>
 								<li><a href="takeAppointment">Take Appointment</a></li>
+								<li><a href="search">Search</a></li>
+                                   <input type=hidden value=<%=user%> id="user">
 
 								<div class="clearfix"></div>
 							</ul>

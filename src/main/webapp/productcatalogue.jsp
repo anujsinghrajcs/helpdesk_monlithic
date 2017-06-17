@@ -1,4 +1,4 @@
-
+<%@ page import="org.spring.controller.*" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -19,8 +19,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>
 	$(document).ready(function() {
+		var user=document.getElementById("user").value;
 		$.ajax({
-			url: "http://localhost:8080/helpdesk/rest/CatalogueService/getCatalogue/pkocher"
+			url: "http://localhost:9080/helpdesk/rest/CatalogueService/getCatalogue/"+user
 		}).then(function(data) {
 			var response=data.ProductFamilyList;
 		  var	conunt=1; 
@@ -105,22 +106,25 @@
                 <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                 <ul class="nav" id="nav">
 				                   <%
-								       String user = (String)request.getAttribute("user"); 
-										if(user.equals("arsinghcs@gmail.com"))
-										{
-                                
-									%>
+				                   
+				                 LoginForm loginform=(LoginForm)session.getAttribute("LOGGEDIN_USER") ;
+				                   String user=loginform.getUsername();
+		                        if(session.getAttribute("ACCESS_LEVEL").equals("4"))
+		                                                                                {
+
+		                                                                        %>
 								
                               <li class="active"><a href="productcatalogueAdmin">Product Catalogue Admin</a></li>
 							  <%
 								}
 							  %>
-                                <li class="active"><a href="productcatalogue">Product Catalogue</a></li><input type=hidden value=<%=user%> id="user">
+                                <li class="active"><a href="productcatalogue">Product Catalogue</a></li>
+                                <input type=hidden value=<%=user%> id="user">
                                 <li><a href="createCaseOr">Create an Incident</a></li>
                                 <li><a href="notesAll">Message Board</a></li>
                                 <li><a href="viewAllCase">View Incident</a></li>
 								 <%
-									if(user.equals("arsinghcs@gmail.com"))
+			                        if(session.getAttribute("ACCESS_LEVEL").equals("4"))
 									{
                                 
 									%>
@@ -129,6 +133,8 @@
 								}
 							  %>
 								<li><a href="takeAppointment">Take Appointment</a></li>
+                           		<li><a href="search">Search</a></li>
+                                   <input type=hidden value=<%=user%> id="user">
 
 								<div class="clearfix"></div>
 							</ul>

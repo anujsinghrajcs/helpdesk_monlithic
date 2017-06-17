@@ -93,12 +93,13 @@
             <div class="menu">
                 <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                 <ul class="nav" id="nav">
-				                   <%
-								       String user = (String)request.getAttribute("user"); 
-										if(user.equals("arsinghcs@gmail.com"))
-										{
-                                
-									%>
+				                     
+						     <%
+                                                                       String user = (String)request.getAttribute("user");
+                        if(session.getAttribute("ACCESS_LEVEL").equals("4"))
+                                                                                {
+
+                                                                        %>
 								
                               <li class="active"><a href="productcatalogueAdmin">Product Catalogue Admin</a></li>
 							  <%

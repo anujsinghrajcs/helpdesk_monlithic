@@ -1,3 +1,5 @@
+<%@ page import="org.spring.controller.*" %>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -54,8 +56,9 @@
                 <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                 <ul class="nav" id="nav">
 				                   <%
-								       String user ="";// ((com.rst.oauth2.google.security.GoogleProfile)request.getAttribute("user")).getEmail(); 
-										if(user.equals("arsinghcs@gmail.com"))
+				                   LoginForm loginform=(LoginForm)session.getAttribute("LOGGEDIN_USER") ;
+				                   String user=loginform.getUsername();
+				                   if(session.getAttribute("ACCESS_LEVEL").equals("4"))
 										{
                                 
 									%>
@@ -68,16 +71,18 @@
                                 <li><a href="createCaseOr">Create an Incident</a></li>
                                 <li><a href="notesAll">Message Board</a></li>
                                 <li><a href="viewAllCase">View Incident</a></li>
-								 <%
-									if(user.equals("arsinghcs@gmail.com"))
-									{
-                                
-									%>
+								  
+						     <%
+                        if(session.getAttribute("ACCESS_LEVEL").equals("4"))
+                                                                                {
+
+                                                                        %>
 								  <li><a href="appointment">Appointment</a></li>
 							   <%
 								}
 							  %>
 								<li><a href="takeAppointment">Take Appointment</a></li>
+								<li><a href="search">search</a></li>
 
 								<div class="clearfix"></div>
 							</ul>

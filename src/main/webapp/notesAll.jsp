@@ -23,14 +23,14 @@
 		<script>
 	$(document).ready(function() {
 		$.ajax({
-			url: "http://localhost:8080/helpdesk/rest/MessageService/getAllMessage"
+			url: "http://localhost:9080/helpdesk/rest/MessageService/getAllMessage"
 		}).then(function(data) {
 		  var response=data.messages;
 		  var response1=data.date;
 		  var	conunt=1; 
 		  $.each(response, function(i, item) {
             var $tr = $('<tr class="Users_Catalogue_bg">').append(
-			$('<td>').html("<a href='http://localhost:8080/helpdesk/messageboard?title="+item.title+"'>"+conunt+"</a>"),
+			$('<td>').html("<a href='http://localhost:9080/helpdesk/messageboard?title="+item.title+"'>"+conunt+"</a>"),
             $('<td>').text(item.title),
             $('<td>').text(item.date)
 				).appendTo('#added-articles');
@@ -67,12 +67,13 @@
             <div class="menu">
                 <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                <ul class="nav" id="nav">
-				                   <%
-								       String user = (String)request.getAttribute("user"); 
-										if(user.equals("arsinghcs@gmail.com"))
-										{
-                                
-									%>
+				                     
+						     <%
+                                                                       String user = (String)request.getAttribute("user");
+                        if(session.getAttribute("ACCESS_LEVEL").equals("4"))
+                                                                                {
+
+                                                                        %>
 								
                               <li class="active"><a href="productcatalogueAdmin">Product Catalogue Admin</a></li>
 							  <%
@@ -83,7 +84,7 @@
                                 <li><a href="notesAll">Message Board</a></li>
                                 <li><a href="viewAllCase">View Incident</a></li>
 								 <%
-									if(user.equals("arsinghcs@gmail.com"))
+			                        if(session.getAttribute("ACCESS_LEVEL").equals("4"))
 									{
                                 
 									%>
@@ -92,7 +93,8 @@
 								}
 							  %>
 								<li><a href="takeAppointment">Take Appointment</a></li>
-
+                           		<li><a href="search">Search</a></li>
+                           
 								<div class="clearfix"></div>
 							</ul>
                 <script type="text/javascript" src="js/responsive-nav.js"></script>

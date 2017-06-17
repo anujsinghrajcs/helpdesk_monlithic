@@ -42,13 +42,26 @@
 					 <div class="menu">
 						  <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
 						    <ul class="nav" id="nav">
+						    
+						     <%
+                                                                       String user = (String)request.getAttribute("user");
+                        if(session.getAttribute("ACCESS_LEVEL").equals("4"))
+                                                                                {
+
+                                                                        %>
+						  
 							<li class="active"><a href="productcatalogueAdmin">Product Catalogue Admin</a></li>
+							  <%
+                                                                }
+                                                          %>
                                 <li class="active"><a href="productcatalogue">Product Catalogue</a></li>
                                 <li><a href="createCaseOr">Create an Incident</a></li>
                                 <li><a href="notesAll">Message Board</a></li>
                                 <li><a href="viewAllCase">View Incident</a></li>				
 								<li><a href="appointment">Appointment</a></li>
 								<li><a href="takeAppointment">Take Appointment</a></li>
+								<li><a href="search">Search</a></li>
+								
 
 								<div class="clearfix"></div>
 							</ul>

@@ -232,6 +232,8 @@
                                 <li><a href="viewAllCase">View Incident</a></li>				
 								<li><a href="appointment">Appointment</a></li>
 								<li><a href="takeAppointment">Take Appointment</a></li>
+								<li><a href="search">Search</a></li>
+								
 								<div class="clearfix"></div>
 							</ul>
 							<script type="text/javascript" src="js/responsive-nav.js"></script>
