@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.cisco.appointment.Dao.AppointMentDao;
+import com.helpdesk.appointment.Dao.AppointMentDao;
 
 import jquery.datatables.model.AppointmentDetails;
 import jquery.datatables.model.DataRepository;

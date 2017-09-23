@@ -575,7 +575,8 @@ public class HelpDeskTicketServiceHelper {
 	public TicketResponse createSr(TicketRequest ticketRequest) {
 		TicketResponse output = new TicketResponse();
 		try  {
-			   saveToDatabase(ticketRequest);
+			String ticket=   saveToDatabase(ticketRequest);
+			output.setTicketNumber(ticket);
 			   
 		    } catch (Exception e)
 		    {

@@ -133,6 +133,7 @@ public class SearchHelper {
 			executorService.shutdown();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return searchResponse;
 

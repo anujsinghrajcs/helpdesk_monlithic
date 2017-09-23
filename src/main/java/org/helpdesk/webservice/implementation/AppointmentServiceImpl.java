@@ -36,13 +36,6 @@ public class AppointmentServiceImpl  {
 
 	
 	AppointmentServiceHelper helper =null;
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.cisco.faststart.ws.service.AppointmentService#getAvailableTimeSlots
-	 * (javax.ws.rs.core.HttpHeaders, java.lang.String, java.lang.String)
-	 */
 	
 	@POST
 	@Consumes({"application/xml", "application/json"})
@@ -58,13 +51,6 @@ public class AppointmentServiceImpl  {
 		return response;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.cisco.faststart.ws.service.AppointmentService#getAvailableDates(javax
-	 * .ws.rs.core.HttpHeaders, java.lang.String, java.lang.String)
-	 */
 	@POST
 	@Consumes({"application/xml", "application/json"})
 	@Produces({"application/json"})

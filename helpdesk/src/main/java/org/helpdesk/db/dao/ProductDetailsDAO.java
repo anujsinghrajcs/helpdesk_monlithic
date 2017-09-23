@@ -73,32 +73,7 @@ public class ProductDetailsDAO {
 		return pfList;
 	}
 	
-	/*public List<CategorizerIssueTypeDetails> getAssociatedIssueTypesAndScopes(
-			String productId) {			
-		List<CategorizerIssueTypeDetails> categorizerIssueTypeDetails = new ArrayList<CategorizerIssueTypeDetails>();
-		List<IssueType> issuetypes = getIssueTypes(productId);
-		for (IssueType issueType : issuetypes) {
-			CategorizerIssueTypeDetails issueTypeDetails = new CategorizerIssueTypeDetails();
-			issueTypeDetails.setIssueType(issueType.getIssuetype());
-			List<IssUesrMapping> issueScopes = getIssueScopes(issueType);
-			List<CategorizerIssueScope> categorizerIssueScopes = new ArrayList<CategorizerIssueScope>();
-			for (IssUesrMapping isMapping : issueScopes) {
-				CategorizerIssueScope issueScope = new CategorizerIssueScope();
-				issueScope.setName(isMapping.getIssuescope());
-				issueScope.setCiscoTechnology(isMapping.getCiscotechnology());
-				issueScope.setCiscoSubTechnology(isMapping
-						.getCiscosubtechnology());
-				issueScope.setProblemCode(isMapping.getCiscoproblemcode());
-				issueScope.setIssueTypeId(String.valueOf(isMapping
-						.getIssuetype_id()));
-				categorizerIssueScopes.add(issueScope);
-			}
 
-			issueTypeDetails.setIssueScopeList(categorizerIssueScopes);
-			categorizerIssueTypeDetails.add(issueTypeDetails);
-		}
-		return categorizerIssueTypeDetails;
-	}*/
 	
 	public List<CategorizerIssueTypeDetails> getAssociatedIssueTypesAndScopes(
 			String productId) {			
@@ -112,10 +87,6 @@ public class ProductDetailsDAO {
 			for (SmartSuggestIssueScope isMapping : issueScopes) {
 				CategorizerIssueScope issueScope = new CategorizerIssueScope();
 				issueScope.setName(isMapping.getIssuescope());
-				issueScope.setCiscoTechnology(isMapping.getCiscotechnology());
-				issueScope.setCiscoSubTechnology(isMapping
-						.getCiscosubtechnology());
-				issueScope.setProblemCode(isMapping.getCiscoproblemcode());
 				/*issueScope.setIssueTypeId(String.valueOf(isMapping
 						.getIssuetype_id()));*/
 				categorizerIssueScopes.add(issueScope);

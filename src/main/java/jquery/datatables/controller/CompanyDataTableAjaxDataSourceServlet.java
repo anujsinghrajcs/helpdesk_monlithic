@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.cisco.appointment.Dao.AppointMentDao;
+import com.helpdesk.appointment.Dao.AppointMentDao;
 
 import jquery.datatables.model.AppointmentDetails;
 import jquery.datatables.model.DataRepository;

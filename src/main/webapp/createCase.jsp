@@ -1,4 +1,6 @@
-
+<%@ page language="java" import="java.util.*" %> 
+<%@ page language="java" import="java.io.*" %> 
+<%@ page import = "java.util.ResourceBundle" %>
 <%@ page import="java.util.Map" %>  
 <%@ page import="org.spring.controller.*" %>
 
@@ -85,10 +87,24 @@ a#category_bread {
 input[type="submit"] {cursor:pointer;}
 </style>
 
+ <% File configDir = new File(System.getProperty("catalina.base"), "lib");
+	 File configFile = new File(configDir, "application.properties");
+	 InputStream stream = new FileInputStream(configFile);
+	 Properties props = new Properties();
+	 props.load(stream);
+	 LoginForm loginform=(LoginForm)session.getAttribute("LOGGEDIN_USER") ;
+     String user=loginform.getUsername();
+	  %>
+	
     <script>
 	$(document).ready(function() {
+		  var getCatalogue = '<%= props.getProperty("endPoints.getCatalogue") %>';
+		  var getIssueTypesAndScopes = '<%= props.getProperty("endPoints.getIssueTypesAndScopes") %>';
+          var createTicket= '<%= props.getProperty("endPoints.createTicket") %>';
+	
 		$.ajax({
-			url: "http://localhost:9080/helpdesk/rest/CatalogueService/getCatalogue/pkocher"
+			
+			url: getCatalogue+'/<%=user%>'
 		}).then(function(data) {
 			var response=data.ProductFamilyList;
 		 
@@ -112,7 +128,8 @@ input[type="submit"] {cursor:pointer;}
 	function loadIssueType(dataItem)
 	{
 	  $.ajax({
-			url: "http://localhost:9080/helpdesk/rest/service/rest/caseCreateInputsService/getIssueTypesAndScopes/"+dataItem
+		
+			url:getIssueTypesAndScopes+dataItem
 		}).then(function(data) {
 			var response=data.IssueTypeDetails;
 		 
@@ -144,6 +161,7 @@ input[type="submit"] {cursor:pointer;}
 	function saveCase()
 	{
 		
+                 var createTicket= '<%= props.getProperty("endPoints.createTicket") %>';
 	
 	var enviormentstatus=$( "#enviormentstatus" ).val();
 	var products=$( "#products" ).val();
@@ -151,7 +169,7 @@ input[type="submit"] {cursor:pointer;}
 	var issueType=$( "#issueType" ).val();
 	var contactType=$( "#contactType" ).val();
 	var title=$( "#caseTitle" ).val();
-	alert(title);
+
     if(enviormentstatus==''||products==''||issueType==''||contactType==''||title=='')
 		{
 		$( "#error" ).empty();
@@ -201,7 +219,7 @@ input[type="submit"] {cursor:pointer;}
         "isPartner": isPartner,
         "privilege_level": privilege_level,
         "access_level": "Y",
-        "descriptiveSummary": "No No i am sumary",
+        "descriptiveSummary": title,
         "accesslevel": accesslevel,
         "emailAddress": user
             }
@@ -209,11 +227,12 @@ input[type="submit"] {cursor:pointer;}
         'Accept': 'application/json',
         'Content-Type': 'application/json' 
     },
-            url: 'http://localhost:9080/helpdesk/rest/TicketService/createTicket',
+           
+            url: createTicket,
             type: 'POST',
 			dataType: 'json',
             data: JSON.stringify(dataToSend)    ,
-      success: function() { alert('PUT completed'); }
+      success: function(data) {  $("#caseNumber").html("Success :- Case No. "+data.ticketNumber); }
         }).fail(function (jqXHR, textStatus, error) {
     // Handle error here
     alert(jqXHR.responseText);
@@ -248,8 +267,7 @@ input[type="submit"] {cursor:pointer;}
                 <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
                 <ul class="nav" id="nav">
 				                   <%
-				                   LoginForm loginform=(LoginForm)session.getAttribute("LOGGEDIN_USER") ;
-				                   String user=loginform.getUsername();
+				                  
 				                   if(session.getAttribute("ACCESS_LEVEL").equals("4"))										{
                                 
 									%>
@@ -310,8 +328,8 @@ input[type="submit"] {cursor:pointer;}
 				<div id="error" style="color: #FD0C0C; width:100%"></div>
                     <div class="living_box">
 									
-									Case Title
-									<input type="text" id="caseTitle" class="form-control check_input" placeholder="Caser Title" style="color: #FD0C0C; width:100%"/>
+									<div id="caseNumber"></div>
+							<div>	Title	<input type="text" id="caseTitle" class="form-control check_input" placeholder="Caser Title" style="color: #FD0C0C; width:100%"/></div>
 									<div class="name_val">&nbsp;</div>
 									<fieldset>
 									<legend>Environment Status</legend>

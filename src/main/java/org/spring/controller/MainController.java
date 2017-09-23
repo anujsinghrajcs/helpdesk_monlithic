@@ -7,6 +7,8 @@ import java.util.Locale;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.helpdesk.db.dao.AuthenticateDao;
+import org.helpdesk.webservice.support.AuthorizationServiceHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,8 @@ public class MainController {
 	    private static ObjectMapper OM = new ObjectMapper();
 	    @Autowired
 	    private HttpServletRequest context;
+	    @Autowired
+	    private AuthenticateDao authenticateDao;
 	// @Autowired private OAuth2RestOperations oauth2RestTemplate;
 	// @Autowired private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
 
@@ -109,9 +113,11 @@ public class MainController {
 		// A simple authentication manager
 		if(username != null && password != null){
 			
-			if( username.equals("pkocher") &&	password.equals("test") ){
+			if( username.equals("pkocher") &&	password.equals(authenticateDao.getPassword(username)) ){
 				// Set a session attribute to check authentication then redirect to the welcome uri; 
 				request.getSession().setAttribute("LOGGEDIN_USER", loginform);
+				request.getSession().setAttribute("ACCESS_LEVEL", authenticateDao.getAccessLevel(username));
+
 				return "redirect:/landing";
 			}else{
 				return "redirect:/login.failed";
@@ -402,6 +408,25 @@ public class MainController {
 		model.addObject("msg", "You've been logged out successfully.");
 	  }
 	  model.setViewName("messageboard");
+
+	  return model;
+
+	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public ModelAndView search(@RequestParam(value = "error", required = false) String error,
+		@RequestParam(value = "logout", required = false) String logout) {
+		LoginForm userData = (LoginForm) context.getSession().getAttribute("LOGGEDIN_USER");
+			
+	  ModelAndView model = new ModelAndView("search","user", userData.getUsername());
+	  if (error != null) {
+		model.addObject("error", "Invalid username and password!");
+	  }
+
+	  if (logout != null) {
+		model.addObject("msg", "You've been logged out successfully.");
+	  }
+	  model.setViewName("search");
 
 	  return model;
 

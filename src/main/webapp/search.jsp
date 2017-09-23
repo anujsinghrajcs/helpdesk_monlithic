@@ -99,7 +99,6 @@ Properties props = new Properties();
 props.load(stream);
  %>
  var serachEndPoint = '<%= props.getProperty("endPoints.serachEndPoint") %>';
-alert(serachEndPoint);
  var solrSearchEndPoint= '<%= props.getProperty("endPoints.solrSearchEndPoint") %>';
  $.ajax({headers: {
         'Accept': 'application/json',
@@ -110,7 +109,7 @@ alert(serachEndPoint);
              dataType: 'json',
             data: JSON.stringify(dataToSend)    ,
       success: function(data, textStatus, jqXHR) { 
-
+    alert(data)
  $("#results").empty();
   productString='';
  if(typeof data.catalogue != "undefined"){
@@ -145,7 +144,7 @@ if(typeof data.Tickets != "undefined"){
     
     function solrsearch()
 		 {
-
+        var solrSearchEndPoint= '<%= props.getProperty("endPoints.solrSearchEndPoint") %>';
 		    var searchText=document.getElementById("searchText").value;
 			if(searchText=='')
 			 {
@@ -158,7 +157,7 @@ if(typeof data.Tickets != "undefined"){
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     },
-            url: 'http://localhost:9080/helpdesk/rest/SerachService/solrSearch',
+            url: solrSearchEndPoint,
             type: 'POST',
              dataType: 'json',
             data: JSON.stringify(dataToSend)    ,
@@ -268,8 +267,8 @@ function objToString (obj) {
             <div class="dropdown-buttons">
                 <div class="modal_popup_dropdown-button">
                             <select class="dropdown" id="profile" tabindex="9" onchange="jsfunction()" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0"><a href="/UserProfile.html">My Profile</a></option>
-                                <option value="1"><a href="/index.html">Log Out</a></option>
+                                <option value="0"><a href="/profile">My Profile</a></option>
+                                <option value="1"><a href="/">Log Out</a></option>
                     </select>
                 </div>
 

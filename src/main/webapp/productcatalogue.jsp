@@ -1,3 +1,6 @@
+<%@ page language="java" import="java.util.*" %> 
+<%@ page language="java" import="java.io.*" %> 
+<%@ page import = "java.util.ResourceBundle" %>
 <%@ page import="org.spring.controller.*" %>
 <!DOCTYPE HTML>
 <html>
@@ -18,10 +21,19 @@
     <link href="css/animate.css" rel='stylesheet' type='text/css' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>
+	
 	$(document).ready(function() {
 		var user=document.getElementById("user").value;
+		<% File configDir = new File(System.getProperty("catalina.base"), "lib");
+		File configFile = new File(configDir, "application.properties");
+		InputStream stream = new FileInputStream(configFile);
+		Properties props = new Properties();
+		props.load(stream);
+		 %>
+		 var getCatalogue = '<%= props.getProperty("endPoints.getCatalogue") %>';
+//	alert(getCatalogue);	
 		$.ajax({
-			url: "http://localhost:9080/helpdesk/rest/CatalogueService/getCatalogue/"+user
+			url: getCatalogue+"/"+user
 		}).then(function(data) {
 			var response=data.ProductFamilyList;
 		  var	conunt=1; 
@@ -154,8 +166,8 @@
             <div class="dropdown-buttons">
                 <div class="modal_popup_dropdown-button">
                             <select class="dropdown" id="profile" tabindex="9" onchange="jsfunction()" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0"><a href="/UserProfile.html">My Profile</a></option>
-                                <option value="1"><a href="/index.html">Log Out</a></option>
+                                <option value="0"><a href="/profile">My Profile</a></option>
+                                <option value="1"><a href="/">Log Out</a></option>
                     </select>
                 </div>
 

@@ -1,4 +1,6 @@
-
+<%@ page language="java" import="java.util.*" %> 
+<%@ page language="java" import="java.io.*" %> 
+<%@ page import = "java.util.ResourceBundle" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -20,17 +22,30 @@
     <script>
         new WOW().init();
     </script>
+
+ <% File configDir = new File(System.getProperty("catalina.base"), "lib");
+                 File configFile = new File(configDir, "application.properties");
+                 InputStream stream = new FileInputStream(configFile);
+                 Properties props = new Properties();
+                 props.load(stream);
+                  %>
+
 		<script>
-	$(document).ready(function() {
+		
+		
+	   $(document).ready(function() {
+           
 		$.ajax({
-			url: "http://localhost:9080/helpdesk/rest/MessageService/getAllMessage"
+			
+			url: "<%= props.getProperty("endPoints.getAllMessage") %>"
 		}).then(function(data) {
 		  var response=data.messages;
 		  var response1=data.date;
 		  var	conunt=1; 
 		  $.each(response, function(i, item) {
             var $tr = $('<tr class="Users_Catalogue_bg">').append(
-			$('<td>').html("<a href='http://localhost:9080/helpdesk/messageboard?title="+item.title+"'>"+conunt+"</a>"),
+        
+			$('<td>').html('<%= props.getProperty("endPoints.messageboard") %>'+'?title='+item.title+'>'+conunt+'</a>'),
             $('<td>').text(item.title),
             $('<td>').text(item.date)
 				).appendTo('#added-articles');
@@ -113,8 +128,8 @@
             <div class="dropdown-buttons">
                 <div class="modal_popup_dropdown-button">
                             <select class="dropdown" id="profile" tabindex="9" onchange="jsfunction()" data-settings='{"wrapperClass":"flat"}'>
-                                <option value="0"><a href="/UserProfile.html">My Profile</a></option>
-                                <option value="1"><a href="/index.html">Log Out</a></option>
+                                 <option value="0"><a href="/profile">My Profile</a></option>
+                                <option value="1"><a href="/">Log Out</a></option>
                     </select>
                 </div>
 

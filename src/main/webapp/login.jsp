@@ -1,3 +1,6 @@
+<%@ page language="java" import="java.util.*" %> 
+<%@ page language="java" import="java.io.*" %> 
+<%@ page import = "java.util.ResourceBundle" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -20,10 +23,18 @@
 <!--Animation-->
   
 <script src="js/wow.min.js"></script>
-
+	<% File configDir = new File(System.getProperty("catalina.base"), "lib");
+       	 File configFile = new File(configDir, "application.properties");
+       	 InputStream stream = new FileInputStream(configFile);
+       	 Properties props = new Properties();
+       	 props.load(stream);
+       	%>
 <script>
         function login()
                  {
+        
+  		  var authenticate = '<%= props.getProperty("endPoints.authenticate") %>';
+  		  
 
                     var userName=document.getElementById("username").value;
                     var password = getParameterByName('password');
@@ -40,7 +51,8 @@
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     },
-            url: 'http://localhost:9080/helpdesk/rest/Authentication/authenticate',
+          //  url: 'http://localhost:9080/helpdesk/rest/Authentication/authenticate',
+          url: authenticate,
             type: 'POST',
                         dataType: 'json',
             data: JSON.stringify(dataToSend),
@@ -71,18 +83,17 @@
                     <h4 class="modal-title" style="text-align: center;">Welcome</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Sign in to enjoy our  Data!  </p>
-
-                    <div class="dodal_popup">
-                        <div style="margin-top:20%">
+                   
+                    <div >
+                      
       <form:form action="login" method="post"  modelAttribute="loginAttribute">
-		<table border="0" cellpadding="0" cellspacing="0">
+		<table border="0" cellpadding="1" cellspacing="0">
 		<tr>
-			<th>Username</th>
+			<th>Username &nbsp;</th>
 			<td><form:input type="text"  class="login-inp" path="username" /></td>
 		</tr>
 		<tr>
-			<th>Password</th>
+			<th>Password &nbsp; </th>
 			<td><form:input type="password" value="************"  onfocus="this.value=''" class="login-inp" path="password"/></td>
 		</tr>
 		<tr>
@@ -97,19 +108,14 @@
 		</form:form>
 </div>
                         </div>
-                        <div style="margin-top:60%">
-                           
-                        </div>
-                        <button type="button" onclick="createMessage()" class="btn btn-danger" <img src="images/Google.png">Sign in with Google</button>
+                       
 						
                     </div>
                     
 
 
                 </div>
-                <div class="modal_popup_footer">
-                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                </div>
+               
             </div>
         </div>
     </div>
@@ -117,7 +123,7 @@
 
             <div class="col-sm-2 header_right " onload="showModal()>
                 <!--<div id="loginContainer">
-            <a href="#" id="loginButton"><img src="images/login.png"><span>User Name</span></a>
+
             <div id="loginBox">
                 <form id="loginForm">
                     <fieldset id="body">
@@ -135,7 +141,7 @@
                     <span><a href="#">Forgot your password?</a></span>
                 </form>
             </div>
-        </div>-->
+        </div>
               
                 <div class="clearfix"></div>
             </div>

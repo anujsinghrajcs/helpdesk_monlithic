@@ -62,7 +62,7 @@ public class HelpDeskBasicSearchImp implements  ApplicationContextAware {
 		
 		try
 		{
-		     HttpSolrServer solr = new HttpSolrServer("http://cm1.sdafpoc.stic.cisco-services.com:8983/solr/helpdesk");
+		     HttpSolrServer solr = new HttpSolrServer("http://host:8983/solr/helpdesk");
 
 		     SolrQuery query = new SolrQuery();
 		     query.setQuery(request.getQuery());

@@ -1,4 +1,6 @@
-
+<%@ page language="java" import="java.util.*" %> 
+<%@ page language="java" import="java.io.*" %> 
+<%@ page import = "java.util.ResourceBundle" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -63,7 +65,15 @@
 				   });
 	    function getAvailableDate()
 		 {
-		   alert('call of web service');
+	    	 <% File configDir = new File(System.getProperty("catalina.base"), "lib");
+	    	 File configFile = new File(configDir, "application.properties");
+	    	 InputStream stream = new FileInputStream(configFile);
+	    	 Properties props = new Properties();
+	    	 props.load(stream);
+	    	  %>
+	    	  var getAvailableDates = '<%= props.getProperty("endPoints.getAvailableDates") %>';
+
+
 
 		   var product=document.getElementById("product");
 		   var timeZone=document.getElementById("timeZone");
@@ -74,12 +84,13 @@
         'Accept': 'application/json',
         'Content-Type': 'application/json' 
     },
-            url: 'http://localhost:9080/helpdesk/rest/AppointmentService/getAvailableDates',
+
+            url: getAvailableDates,
             type: 'POST',
 			dataType: 'json',
             data: JSON.stringify(dataToSend),
 		   success:  function(results) {
-           // alert(results.availableDates);
+
         $.each(results.availableDates, function(i, item) {
            $("select[name='appointmentdate']").append('<option value="'+item+'">'+item+' </option>');		conunt++;
     });
@@ -99,7 +110,7 @@
 
    function getAvailableslot()
 		 {
-		   alert('call of web service');
+                  var getAvailableTimeSlots = '<%= props.getProperty("endPoints.getAvailableTimeSlots") %>';
 
 		   var product=document.getElementById("product");
 		   var timeZone=document.getElementById("timeZone");
@@ -111,7 +122,8 @@
         'Accept': 'application/json',
         'Content-Type': 'application/json' 
     },
-            url: 'http://localhost:9080/helpdesk/rest/AppointmentService/getAvailableTimeSlots',
+
+          url: getAvailableTimeSlots,
             type: 'POST',
 			dataType: 'json',
             data: JSON.stringify(dataToSend),
@@ -131,7 +143,7 @@
 
 function createAppointment()
 		 {
-
+                     var  saveAppointment=  '<%= props.getProperty("endPoints.saveAppointment") %>';
 		   var product=document.getElementById("product");
 		   var timeZone=document.getElementById("timeZone");
 		    var appointmentdate=document.getElementById("appointmentdate");
@@ -144,7 +156,8 @@ function createAppointment()
         'Accept': 'application/json',
         'Content-Type': 'application/json' 
     },
-            url: 'http://localhost:9080/helpdesk/rest/AppointmentService/saveAppointment/',
+           // url: 'http://localhost:9080/helpdesk/rest/AppointmentService/saveAppointment/',
+            url: saveAppointment,
             type: 'POST',
 			dataType: 'json',
             data: JSON.stringify(dataToSend),
@@ -220,8 +233,8 @@ function createAppointment()
             <div class="dropdown-buttons">
                 <div class="modal_popup_dropdown-button">
                             <select class="dropdown" id="profile" tabindex="9" onchange="jsfunction()" data-settings='{"wrapperClass":"flat"}'>
-                        <option value="0">My Profile</option>
-                        <option value="1">Log Out</option>
+                    <option value="0"><a href="/profile">My Profile</a></option>
+                                <option value="1"><a href="/">Log Out</a></option>
                     </select>
                 </div>
 

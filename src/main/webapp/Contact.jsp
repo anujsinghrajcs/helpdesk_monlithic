@@ -51,8 +51,8 @@
             <div class="dropdown-buttons">
                 <div class="modal_popup_dropdown-button">
                     <select class="dropdown" tabindex="9" data-settings='{"wrapperClass":"flat"}'>
-                        <option value="0">My Profile</option>
-                        <option value="1">Log Out</option>
+                       <option value="0"><a href="/profile">My Profile</a></option>
+                                <option value="1"><a href="/">Log Out</a></option>
                     </select>
                 </div>
 
